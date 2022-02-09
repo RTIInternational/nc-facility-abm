@@ -1,0 +1,110 @@
+FID,ptorg name,County,Facility,Address,City,LAT,LON,Beds,ICU Beds,Acute Fill,ICU Fill
+943388,Park Ridge Health,Henderson,AdventHealth Hendersonville,100 Hospital Drive,Hendersonville,35.389938,-82.488152,62,6,0.8,0.7
+954565,Alamance Regional Medical Center,Alamance,Alamance Regional Medical Center,PO Box 202,Burlington,36.0612027,-79.5017657,182,32,0.8,0.7
+932934,,Alexander,Alexander Hospital,P O Box 2568,Hickory,35.906029,-81.204643,25,0,0.8,0.7
+942935,Alleghany Memorial Hospital,Alleghany,Alleghany Memorial Hospital,P O Box 9,Sparta,36.5094773,-81.1146651,41,4,0.8,0.7
+942938,Angel Medical Center,Macon,Angel Medical Center,P O Box 1209,Franklin,35.18455285,-83.37914859,59,6,0.8,0.7
+932940,Annie Penn Hospital,Rockingham,Annie Penn Hospital,618 South Main St.,Reidsville,36.35378,-79.66626,110,8,0.8,0.7
+942944,Ashe Memorial Hospital,Ashe,"Ashe Memorial Hospital, Inc.",200 Hospital Ave.,Jefferson,36.4234688,-81.45782192,76,8,0.8,0.7
+120335,Anson County Hospital,Anson,Atrium Health Anson,2301 US Highway 74 West,Wadesboro,34.97751385,-80.11005802,15,0,0.8,0.7
+943049,Carolinas Medical Center Northeast,Cabarrus,Atrium Health Cabarrus,920 Church St N,Concord,35.4375493,-80.6020838,447,69,0.8,0.7
+953106,Cleveland Regional Medical Center,Cleveland,Atrium Health Cleveland,201 East Grover St,Shelby,35.302834,-81.53566,241,18,0.8,0.7
+70062,Carolinas Medical Center - Lincoln,Lincoln,Atrium Health Lincoln,P O Box 677,Lincolnton,35.4900947,-81.20307636,101,10,0.8,0.7
+110878,CMC - Pineville,Mecklenburg,Atrium Health Pineville,10628 Park Road,Charlotte,35.09203755,-80.87159653,206,40,0.8,0.7
+953472,Stanly Regional Medical Center,Stanly,Atrium Health Stanly,P O Box 1489,Albemarle,35.3640747,-80.19445209,97,10,0.8,0.7
+923515,Union Regional Medical Center,Union,Atrium Health Union,P O Box 5003,Monroe,34.710281,-81.63047,182,18,0.8,0.7
+923516,Carolinas HealthCare System University Hospital,Mecklenburg,Atrium Health University City,P O Box 560727,Charlotte,35.3054619,-80.74690396,100,15,0.8,0.7
+922969,Betsy Johnson Hospital,Harnett,Betsy Johnson  Hospital,P O Dwr 1706,Dunn,35.3068297,-78.6347374,151,6,0.8,0.7
+953466,Blue Ridge Regional Hospital,Mitchell,Blue Ridge Regional Hospital,P O Drawer 9,Spruce Pine,35.91149025,-82.06207583,46,5,0.8,0.7
+933051,Caldwell Memorial Hospital,Caldwell,"Caldwell Memorial Hospital, Inc.",P.O. Box 1890,Lenoir,35.91059635,-81.53513749,110,12,0.8,0.7
+100392,Cape Fear Valley Hoke Hospital,Hoke,Cape Fear Valley Hoke Hospital,210 Medical Pavilion Drive,Raeford,35.029919,-79.107269,41,4,0.8,0.7
+943057,Cape Fear Valley Health System,Cumberland,Cape Fear Valley Medical Center,P O Box 2000,Fayetteville,35.0318114,-78.933272,524,69,0.8,0.7
+942974,Cape Fear Valley-Bladen County Hospital,Bladen,Cape Fear Valley-Bladen County Hospital,P O Box 398,Elizabethtown,34.62262,-78.608017,48,5,0.8,0.7
+923126,CarolinaEast Medical Center,Craven,CarolinaEast Medical Center,P O Box 12157,New Bern,35.11381805,-77.06627783,307,33,0.8,0.7
+110195,,Mecklenburg,Carolinas ContinueCare Hospital at Pineville,10648 Park Road,Charlotte,35.09399,-80.87282,40,0,0.8,0.7
+943191,Blue Ridge HealthCare Hospitals,Burke,Carolinas HealthCare System Blue Ridge,2201 South Sterling St,Morganton,35.726315,-81.654694,293,16,0.8,0.7
+943070,Carolinas HealthCare System Carolinas Medical Center,Mecklenburg,Carolinas Medical Center/Center for Mental Health,P O Box 32861,Charlotte,35.203457,-80.83857,1010,222,0.8,0.7
+943184,CaroMont Regional Medical Center,Gaston,Caromont Regional Medical Center,P O Box 1747,Gastonia,35.27215775,-81.13954344,372,37,0.8,0.7
+923076,Carteret County General Hospital,Carteret,Carteret General Hospital,P O Drawer 1619,Morehead City,34.7258964,-76.75520666,135,0,0.8,0.7
+933080,Catawba Valley Medical Center,Catawba,Catawba Valley Medical Center,810 Fairgrove Church Road SE,Hickory,35.713734,-81.267334,200,36,0.8,0.7
+953084,Central Carolina Hospital,Lee,Central Carolina Hospital,1135 Carthage St,Sanford,35.46909645,-79.18688403,127,10,0.8,0.7
+943054,Charles A. Cannon Jr. Memorial Hospital,Avery,"Charles A. Cannon, Jr. Memorial Hospital, Incorporated",P O Box 767,Linville,36.060516,-81.889259,30,3,0.8,0.7
+933098,Chatham Hospital,Chatham,"Chatham Hospital, Inc.",P O Box 649,Siler City,35.72282835,-79.42112556,25,3,0.8,0.7
+923111,Columbus Regional Healthcare System,Columbus,Columbus Regional Healthcare System,500 Jefferson St,Whiteville,34.33734065,-78.69445306,154,9,0.8,0.7
+943494,Cone Health,Guilford,Cone Health,1200 North Elm St,Greensboro,36.043952,-79.96505773,777,124,0.8,0.7
+80175,Davie County Hospital,Davie,Davie Medical Center,Medical Center Blvd,Winston-Salem,35.899555,-80.571938,50,5,0.8,0.7
+923134,Davis Medical Center,Iredell,Davis Regional Medical Center,P O Box 1823,Statesville,35.8191549,-80.82917194,50,8,0.8,0.7
+923421,Duke Raleigh,Wake,Duke Raleigh Hospital,3400 Wake Forest Road,Raleigh,35.82859565,-78.61794743,186,15,0.8,0.7
+923142,Duke Regional Hospital,Durham,Duke Regional Hospital,3643 North Roxboro Rd,Durham,36.03649455,-78.89963755,316,28,0.8,0.7
+943138,Duke University Medical Center,Durham,Duke University Hospital,P O Box 3814 DUMC,Durham,36.0070213,-78.93734788,938,252,0.8,0.7
+943366,Murphy Medical Center,Cherokee,Erlanger Murphy Medical Center,3990 East US Hwy 64 ALT,Murphy,35.07282125,-83.96709011,57,6,0.8,0.7
+923355,First Health Montgomery Hospital,Montgomery,FirstHealth Montgomery Memorial Hospital,520 Allen St,Troy,35.3647651,-79.89068812,37,4,0.8,0.7
+943358,First Health Moore Regional Hospital,Moore,FirstHealth Moore Reg. Hosp. and Pinehurst Treatment,P O Box 3000,Pinehurst,35.205566,-79.456421,337,57,0.8,0.7
+100390,FirstHealth Moore Regional Hospital - Hoke Campus,Hoke,FirstHealth Moore Regional Hospital - Hoke Campus,155 Memorial Drive,Pinehurst,35.02033965,-79.1502175,8,0,0.8,0.7
+933431,First Health Richmond Memorial Hospital,Richmond,FirstHealth Moore Regional Hospital-Richmond,925 Long Dr,Rockingham,34.928806,-79.749695,99,12,0.8,0.7
+943178,,Franklin,Franklin Medical Center,Franklin County Administration Bldg,Louisburg,36.099575,-78.298716,70,0,0.8,0.7
+943182,Frye Regional Medical Center,Catawba,Frye Regional Medical Center,420 North Center St,Hickory,35.7373084,-81.33809331,209,30,0.8,0.7
+943195,Granville Health System,Granville,Granville Health System,P O Box 947,Oxford,36.3270928,-78.59215043,62,6,0.8,0.7
+923046,MedWest Harris,Jackson,Harris Regional Hospital,68 Hospital Rd,Sylva,35.3854052,-83.20260902,86,9,0.8,0.7
+933234,Haywood Regional Medical Center,Haywood,Haywood Regional Medical Center,262 Leroy George Drive,Clyde,35.5252312,-82.9427378,126,10,0.8,0.7
+943251,High Point Regional Hospital,Guilford,High Point Regional Health,P O Box HP5,High Point,35.962532,-80.014114,307,28,0.8,0.7
+943256,Highlands-Cashiers Hospital,Macon,Highlands-Cashiers Hospital,P O Drawer 190,Highlands,35.0863677,-83.18570452,24,2,0.8,0.7
+923276,Hugh Chatham Memorial Hospital,Surry,"Hugh Chatham Memorial Hospital, Inc.",P O Box 560,Elkin,36.2618023,-80.83910119,81,8,0.8,0.7
+933284,Iredell Health System,Iredell,"Iredell Memorial Hospital, Incorporated",P O Box 1828,Statesville,35.80037305,-80.87873772,199,16,0.8,0.7
+923286,J. Arthur Dosher Memorial Hospital,Brunswick,J. Arthur Dosher Memorial Hospital,924 Howe St,Southport,33.92933025,-78.02137632,25,3,0.8,0.7
+943290,Johnston Health Clayton,Johnston,Johnston Health,P O Box 1376,Smithfield,35.64164,-78.47246,179,16,0.8,0.7
+953348,,Guilford,Kindred Hospital - Greensboro,2401 Southside Blvd,Greensboro,36.04957199,-79.7718277,101,0,0.8,0.7
+990475,Lake Norman Regional Medical Center,Iredell,Lake Norman Regional Medical Center,P.O. Box 3250,Mooresville,35.5493162,-80.85379414,123,12,0.8,0.7
+943307,Lexington Memorial Hospital,Davidson,Lexington Medical Center,P O Box 1817,Lexington,35.80575965,-80.28693632,94,9,0.8,0.7
+943474,LifeBrite Community Hospital of Stokes,Stokes,LifeBrite Community Hospital of Stokes,1570 NC 8 & 89 HWY N,Danbury,36.418053,-80.230896,53,5,0.8,0.7
+943324,Margaret R. Pardee Memorial Hospital,Henderson,Margaret R. Pardee Memorial Hospital,800 North Justice Street,Hendersonville,35.320967,-82.467171,201,20,0.8,0.7
+943326,Maria Parham Hospital,Vance,Maria Parham Health,PO Box 59,Henderson,36.3310103,-78.44955313,91,8,0.8,0.7
+943328,Martin General Hospital,Martin,Martin General Hospital,P O Box 1128,Williamston,35.8396528,-77.07213121,49,6,0.8,0.7
+943349,Mission Hospital,Buncombe,Mission Hospital,509 Biltmore Ave,Asheville,35.5766889,-82.54922486,708,131,0.8,0.7
+943492,McDowell Hospital,McDowell,Mission Hospital McDowell,P O Box 730,Marion,35.622311,-81.985718,65,6,0.8,0.7
+933368,Nash Health Care System,Nash,Nash General Hospital,2460 Curtis Ellis Dr.,Rocky Mount,35.97620545,-77.85358506,262,18,0.8,0.7
+943372,New Hanover Regional Medical Center,New Hanover,New Hanover Regional Medical Center,2131 S. 17th Street,Wilmington,34.2050891,-77.92105615,647,105,0.8,0.7
+943495,Wake Forest Baptist Medical Center,Forsyth,North Carolina Baptist Hospital,Medical Center Blvd,Winston Salem,36.08983775,-80.26771223,802,176,0.8,0.7
+943374,North Carolina Specialty Hospital,Durham,North Carolina Specialty Hospital,PO Box 15819,Durham,36.04305485,-78.89685681,18,0,0.8,0.7
+953376,Northern Hospital of Surry County,Surry,Northern Regional Hospital,P O Box 1101,Mount Airy,36.48911485,-80.61229628,100,10,0.8,0.7
+61342,Novant Health Brunswick Medical Center,Brunswick,Novant Health Brunswick Medical Center,P O Box139,Supply,34.008957,-78.290123,74,5,0.8,0.7
+923174,Novant Health Forsyth Medical Center,Forsyth,Novant Health Forsyth Medical Center,3333 Silas Creek Pkwy,Winston Salem,36.076046,-80.296875,823,148,0.8,0.7
+990440,Novant Health Huntersville Medical Center,Mecklenburg,Novant Health Huntersville Medical Center,10030 Gilead Rd.,Huntersville,35.4064661,-80.8600158,91,8,0.8,0.7
+945076,Novant Health Matthews Medical Center,Mecklenburg,Novant Health Matthews Medical Center,1500 Matthews Township Parkway,Matthews,35.120087,-80.714058,154,18,0.8,0.7
+943343,Novant Health Medical Park Hospital,Forsyth,Novant Health Medical Park Hospital,1950 South Hawthorne Rd,Winston Salem,36.07897555,-80.29607896,22,0,0.8,0.7
+60857,,Mecklenburg,Novant Health Mint Hill Medical Center,8201 Healthcare Loop,Charlotte,35.22196579,-80.64701843,36,0,0.8,0.7
+943501,Novant Health Presbyterian Medical Center,Mecklenburg,Novant Health Presbyterian Medical Center,P O Box 33549,Charlotte,35.21243755,-80.82430051,567,93,0.8,0.7
+933436,Novant Health Rowan Medical Center,Rowan,Novant Health Rowan Medical Center,612 Mocksville Ave,Salisbury,35.6816495,-80.47113042,203,20,0.8,0.7
+923112,Novant Health Thomasville Medical Center,Davidson,Novant Health Thomasville Medical Center,P O Box 789,Thomasville,35.87981,-80.111618,101,13,0.8,0.7
+923383,Onslow Memorial Hospital,Onslow,"Onslow Memorial Hospital, Inc.",P O Box 1358,Jacksonville,34.76247565,-77.38533118,162,30,0.8,0.7
+923394,Pender Memorial Hospital,Pender,"Pender Memorial Hospital, Inc.",507 E Fremont Street,Burgaw,34.5505574,-77.91980849,43,4,0.8,0.7
+953396,Person County Memorial Hospital,Person,Person Memorial Hospital,615 Ridge Rd,Roxboro,36.40848405,-78.98524838,38,4,0.8,0.7
+933425,Randolph Hospital,Randolph,"Randolph Hospital, Inc.",P O Box 1048,Asheboro,35.711632,-79.813751,145,10,0.8,0.7
+953429,Rex Healthcare,Wake,Rex Hospital,4420 Lake Boone Trail,Raleigh,35.8181161,-78.7032625,439,83,0.8,0.7
+923438,Rutherford Hospital,Rutherford,Rutherford Regional Medical Center,288 South Ridgecrest Ave.,Rutherfordton,35.362175,-81.966125,129,10,0.8,0.7
+943443,Sampson County Memorial Hospital,Sampson,Sampson Regional Medical Center,P O Box 260,Clinton,35.0070507,-78.3248125,116,8,0.8,0.7
+933446,Scotland Health Care System,Scotland,Scotland Memorial Hospital,500 Lauchwood Drive,Laurinburg,34.75325,-79.469597,97,12,0.8,0.7
+952933,Sentara Albemarle Medical Center,Pasquotank,Sentara  Albemarle Medical Center,P O Box 1587,Elizabeth City,36.32361625,-76.21861903,182,10,0.8,0.7
+923461,Southeastern Regional Medical Center,Robeson,Southeastern Regional Medical Center,P O Box 1408,Lumberton,34.6372399,-79.0119809,292,32,0.8,0.7
+943469,Saint Luke's Hospital,Polk,St. Luke's Hospital,101 Hospital Drive,Columbus,35.2394986,-82.21258881,25,3,0.8,0.7
+923480,MedWest Swain,Swain,Swain Community Hospital,45 Plateau St,Bryson City,35.43446,-83.444763,48,5,0.8,0.7
+980550,Outer Banks Hospital,Dare,"The Outer Banks Hospital, Inc.",4800 South Croatan Highway,Nags Head,35.93964995,-75.61819547,21,2,0.8,0.7
+923509,Transylvania Regional Hospital,Transylvania,Transylvania Regional Hospital,260 Hospital Drive,Brevard,35.2560121,-82.71182466,42,4,0.8,0.7
+933304,Lenoir Memorial Hospital,Lenoir,UNC Lenoir Health Care,P O Dwr 1678,Kinston,35.2904187,-77.58361715,218,14,0.8,0.7
+943359,UNC Rockingham Health Center,Rockingham,UNC Rockingham Hospital,117 East Kings Hwy,Eden,36.495174,-79.738716,108,8,0.8,0.7
+923517,University of North Carolina Hospitals,Orange,University of North Carolina Hospitals,101 Manning Dr,Chapel Hill,35.903605,-79.050667,799,201,0.8,0.7
+932963,Vidant Beaufort Hospital,Beaufort,Vidant Beaufort Hospital,628 East Twelfth St,Washington,35.54923895,-77.03809766,120,6,0.8,0.7
+942967,Vidant Bertie Hospital,Bertie,Vidant Bertie  Hospital,P.O. Box 40,Windsor,35.9885957,-76.92894313,6,1,0.8,0.7
+933102,Vidant Chowan Hospital,Chowan,Vidant Chowan Hospital,P O Box 629,Edenton,36.06984615,-76.61089791,49,5,0.8,0.7
+923139,Vidant Duplin Hospital,Duplin,Vidant Duplin  Hospital,401 North Main St,Kenansville,34.9648246,-77.96186573,56,9,0.8,0.7
+923247,Vidant Edgecombe Hospital,Edgecombe,Vidant Edgecombe Hospital,111 Hospital Dr,Tarboro,35.9212473,-77.55575659,101,8,0.8,0.7
+933410,Vidant Medical Center,Pitt,Vidant Medical Center,P O Box 6028,Greenville,35.60759855,-77.40290417,782,180,0.8,0.7
+923223,Halifax Regional Medical Center,Halifax,Vidant North Hospital,P O Box 1089,Roanoke Rapids,36.4324228,-77.64626592,184,8,0.8,0.7
+923435,Vidant Roanoke-Chowan Hospital,Hertford,Vidant Roanoke-Chowan Hospital,P O Box 1385,Ahoskie,36.28533865,-76.99505917,86,10,0.8,0.7
+943528,WakeMed,Wake,WakeMed,P O Box 14465,Raleigh,35.784519,-78.587952,628,134,0.8,0.7
+990332,WakeMed Cary,Wake,WakeMed Cary Hospital,1900 Kildaire Farm Rd.,Cary,35.74039165,-78.78147066,178,12,0.8,0.7
+953531,Washington County Hospital,Washington,Washington Regional Medical Center,P O Box 707,Plymouth,35.8626691,-76.72941164,49,5,0.8,0.7
+933533,Watauga Medical Center,Watauga,"Watauga Medical Center, Inc.",P O Box 2600,Boone,36.19853665,-81.65108916,117,12,0.8,0.7
+933535,Wayne Memorial Hospital,Wayne,Wayne UNC Healthcare,2700 Wayne Memorial Dr,Goldsboro,35.398601,-77.951922,255,15,0.8,0.7
+943561,Wake Forest Baptist Health - Wilkes Medical Center,Wilkes,Wilkes Medical Center,P O Box 609,North Wilkesboro,36.160051,-81.15823652,120,8,0.8,0.7
+923569,Wilson Memorial Hospital,Wilson,Wilson Medical Center,1705 Tarboro St. SW,Wilson,35.71872625,-77.94366324,270,0,0.8,0.7

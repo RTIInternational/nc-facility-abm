@@ -1,0 +1,47 @@
+
+HOSPITAL LISTING Data Fields
+
+
+Copy the following line to the top of the data file to use as a header
+---------------------------------------------------------------------- 
+FID,STYPE,FCOUNTY,FACILITY,FADDR1,FCITY,FSTATE,FZIP,FPHONE,LICNO,EXPIRES,HGENLIC,REHABHLIC,PSYLIC,SALIC,DETOXLIC,HOSLIC,RSRCHLIC,NFGENLIC,OTHRHLIC,ALZLIC,HIVLIC,TBILIC,VENLIC,OTHNFLIC,REHABNLIC,HAALZLIC,HAHIVLIC,HAGENLIC,LICENSEE,,,,ORHEART_HL,ORCSECT_HL,OROTHER_HL,ORAMSU_HL,ORSHARE_HL,ORENDO_HL
+ 
+ 
+
+Name                     Type           Width     Decimal   
+		FID                      C              6         
+		STYPE                    C              10        
+		FCOUNTY                  C              15        
+		FACILITY                 C              55        
+		FADDR1                   C              35        
+		FCITY                    C              30        
+		FSTATE                   C              2         
+		FZIP                     C              10        
+		FPHONE                   C              13        
+		LICNO                    C              10        
+		EXPIRES                  D              8         
+		HGENLIC                  N              4         
+		REHABHLIC                N              4         
+		PSYLIC                   N              4         
+		SALIC                    N              4         
+		DETOXLIC                 N              4         
+		HOSLIC                   N              4         
+		RSRCHLIC                 N              4         
+		NFGENLIC                 N              4         
+		OTHRHLIC                 N              4         
+		ALZLIC                   N              4         
+		HIVLIC                   N              4         
+		TBILIC                   N              4         
+		VENLIC                   N              4         
+		OTHNFLIC                 N              4         
+		REHABNLIC                N              4         
+		HAALZLIC                 N              4         
+		HAHIVLIC                 N              4         
+		HAGENLIC                 N              4         
+		LICENSEE                 C              55        
+		ORHEART_HL               N              4         
+		ORCSECT_HL               N              4         
+		OROTHER_HL               N              4         
+		ORAMSU_HL                N              4         
+		ORSHARE_HL               N              4         
+		ORENDO_HL                N              4         

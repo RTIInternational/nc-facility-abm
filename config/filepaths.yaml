@@ -1,0 +1,43 @@
+# SynthPop
+synthetic_population_file_parquet:
+    path: data/synthetic_population/synthetic_population.parquet
+
+# Sheps
+county_discharges:
+    path: data/sheps_data/2018/2018_master_ptorg_final.csv
+total_discharges:
+    path: data/sheps_data/2018/2018_discharge_final.csv
+sheps_demographics:
+    path: data/sheps_data/2018/2018_subset_ptchar_for_analysis.csv
+
+# Distances
+geography_folder:
+    path: data/geography
+county_distances:
+    path: data/geography/county_distances.csv
+county_distances_base:
+    path: data/geography/sf12010countydistance500miles.csv
+
+# CMS nursing home data
+cms_data_folder:
+    path: data/cms
+cms_data:
+    path: data/cms/cms_data_NC.csv
+
+# NH LOS
+nh_los:
+    path: data/cLOS_MDS_2016.csv
+
+# Facilities
+hospitals:
+    path: data/locations/hospitals.csv
+nursing_homes:
+    path: data/locations/nursing_homes.csv
+nursing_homes_base:
+    path: data/locations/nursing_homes_base.csv
+ltachs:
+    path: data/locations/ltachs.csv
+
+# county codes
+nc_counties:
+    path: data/nc_counties.csv

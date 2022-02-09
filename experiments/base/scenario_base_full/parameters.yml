@@ -1,0 +1,4 @@
+time_horizon: 365
+synpop_variables:
+  - County_Code
+  - Age_Group

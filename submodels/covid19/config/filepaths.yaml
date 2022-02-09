@@ -1,0 +1,14 @@
+covid_cases:
+    path: submodels/covid19/data/cases/covid19_cases.csv
+vaccinations:
+    path: submodels/covid19/data/vaccinations/vaccinations.csv
+pbj_nurse:
+    path: submodels/covid19/data/pbj/PBJ_dailynursestaffing_CY2021Q2.csv
+pbj_non_nurse:
+    path: submodels/covid19/data/pbj/PBJ_dailyNonnursestaffing_CY2021Q2.csv
+pbj_processed:
+    path: submodels/covid19/data/pbj/PBJ.csv
+vaccinations_by_age:
+    path: submodels/covid19/data/vaccinations/vaccinations_by_age.csv
+vaccination_rates_by_age:
+    path: submodels/covid19/data/vaccinations/vaccination_rates_by_age.csv
