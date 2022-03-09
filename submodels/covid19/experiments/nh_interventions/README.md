@@ -1,29 +1,42 @@
 ## NH Interventions
 
 
-### Scenarios
+#### Make Scenarios:
 
-
-
-Create the defined scenarios:
-
-```bash
-python submodels/covid19/experiments/nh_interventions/src/make_scenarios.py 
+```
+python submodels/covid19/experiments/nh_interventions/src/make_scenario.py 
 ```
 
+#### Run Scnearios:
 
-### Running Scenarios
+Replace `n` and `cups` with the desired number of runs and cpus.
 
-
-
-Run the defined scenarios:
-
-```bash
-python submodels/covid19/experiments/nh_interventions/src/run_scenarios.py 
+```
+python submodels/covid19/experiments/nh_interventions/src/run_scenario.py --n=1 --cpus=1
 ```
 
-Analyze the defined scenarios:
+#### Analyze:
 
-```bash
-python submodels/covid19/experiments/nh_interventions/src/analyze_scenarios.py 
+```
+python submodels/covid19/experiments/nh_interventions/src/analyze_scenarios.py
+```
+
+## Server Runs
+
+We ran this analysis on a server to make use of larger computer resources. 
+
+On the server:
+
+```
+docker-compose build
+```
+
+Then:
+
+```
+docker-compose run -d hospital_abm bash -c "python3 submodels/covid19/experiments/nh_interventions/src/make_scenario.py"
+
+docker-compose run -d hospital_abm bash -c "python3 submodels/covid19/experiments/nh_interventions/src/run_scenario.py --n=100 --cpus=10"
+
+docker-compose run -d hospital_abm bash -c "python3 submodels/covid19/experiments/nh_interventions/src/analyze_scenarios.py"
 ```

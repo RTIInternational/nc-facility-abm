@@ -30,7 +30,8 @@ class CovidParameters(Parameters):
         self.add_param("healthcare_worker_vaccination", 0.80, "Vaccination rate for NH healthcare workers.")
         # Vaccine Effectiveness
         self.add_param("baseline_vaccine_effectiveness", 0.24, "Effectiveness of vaccination on preventing COVID.")
-        self.add_param("new_vaccine_effectiveness", 0.24, "Effectiveness to use moving forward.")
+        self.add_param("vaccine_effectiveness", 0.24, "Effectiveness to use moving forward.")
+        self.add_param("hcw_vaccine_effectiveness", 0.24, "Effectiveness to use moving forward for HCWs.")
 
         # Initial Hopistal Patients
         self.add_param(
@@ -97,6 +98,7 @@ class CovidParameters(Parameters):
         )
         self.add_param("visitor_frequency_distribution", {1: 15, 2: 5, 3: 1}, "Average visits per month")
         self.add_param("visitors_with_mild_who_stay_home", 0.6, "Probability someone with mild symptoms stays home")
+        self.add_param("hcw_with_mild_who_stay_home", 0.8, "Probability someone with mild symptoms stays home")
         self.add_param("nh_visitiation_vaccine_required", False, "Is proof of vaccination required for NH visitors?")
 
         # Healthcare worker parameters

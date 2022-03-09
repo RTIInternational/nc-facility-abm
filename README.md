@@ -1,4 +1,4 @@
-# Agent-Based Model Framework for North Carolina’s Healthcare Facilities 
+# Agent-Based Model Framework for the North Carolina Modeling Infectious Diseases Program (NC MInD ABM) 
 
 This repository contains a geospatial hospitlization ABM for North Carolina. Using public data only, we have created a model that simulates hospitalizations and nursing home stays for agents using [RTI SynthPop™](https://www.rti.org/synthpop-synthetic-population-data-analysis).
 

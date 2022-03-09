@@ -4,8 +4,47 @@ from submodels.covid19.model.state import COVIDState, VaccinationStatus
 import numpy as np
 from src.misc_functions import get_multiplier
 from submodels.covid19.model.parameters import CovidParameters
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+import plotly as plotly
 
 experiment_dir = Path("submodels/covid19/experiments/nsf_01_2021")
+
+
+def base_graphic(base_df, base_cases_df):
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    # Add Left Side
+    for value in ["Asymptomatic", "Mild", "Hospitalized for COVID-19"]:
+        if value == "Hospitalized for COVID-19":
+            temp_df = base_df[base_df.COVID_Status.isin(["Severe", "Critical"])]
+            avg = temp_df.groupby("Day")["Average"].sum()
+        else:
+            temp_df = base_df[base_df.COVID_Status == value]
+            avg = temp_df.Average
+        fig.add_trace(
+            go.Scatter(x=temp_df.Day, y=avg, name=f"{value}"),
+            secondary_y=False,
+        )
+
+    # Add Right Side
+    temp_df = base_cases_df[base_cases_df.index != 0]
+    fig.add_trace(
+        go.Scatter(x=temp_df.index, y=temp_df.Average, name="COVID Infections Per 100k"),
+        secondary_y=True,
+    )
+
+    # Add figure title
+    fig.update_layout(title_text="Average Hospital Admissions Per Day & Average Infections Per Day Per 100,000 People")
+
+    # Set x-axis title
+    fig.update_xaxes(title_text="Simulation Day")
+
+    # Set y-axes titles
+    fig.update_yaxes(title_text="Average Admissions", secondary_y=False)
+    fig.update_yaxes(title_text="Average Modeled Infections Per Day Per 100,000 People", secondary_y=True)
+
+    plotly.offline.plot(fig, filename=str(output_dir.joinpath("cases_over_time_v2.html")))
 
 
 if __name__ == "__main__":
@@ -19,6 +58,7 @@ if __name__ == "__main__":
         hospitalizations_dfs = []
         individual_hospital_dfs = []
         base_dfs = []
+        base_cases = []
 
         for run in scenario_dir.glob("run_*"):
             # Get the hospitalizations for each run
@@ -35,9 +75,17 @@ if __name__ == "__main__":
             hospitalizations_dfs.append(th)
 
             if "base" in str(scenario_dir):
+                try:
+                    cases = pd.read_csv(f"{run}/model_output/covid_cases.csv")
+                except FileNotFoundError:
+                    continue
                 temp_df = pd.DataFrame(df.groupby(["COVID_Status", "Time"]).size() / multiplier)
                 temp_df.columns = [f"Count_{run.name}"]
                 base_dfs.append(temp_df)
+
+                # Read Cases
+                avg_cases = cases.groupby("Time").size() / params.num_agents * 100000
+                base_cases.append(avg_cases)
 
             # Count the number for one hospital
             if selected_hospital_id:
@@ -73,22 +121,10 @@ if __name__ == "__main__":
             base_df = base_df.rename(columns={"Time": "Day"})
             base_df.to_csv(output_dir.joinpath(f"{scenario_dir.name}-admissions_by_time.csv"))
 
-            # Plotly
-            import plotly.express as px
-            import plotly
-
-            base_df = base_df[base_df["COVID_Status"] != "Susceptible"]
-            base_df = base_df[base_df["COVID_Status"] != "Recovered"]
-            fig = px.line(
-                base_df,
-                x="Day",
-                y="Average",
-                color="COVID_Status",
-                color_discrete_sequence=px.colors.qualitative.T10,
-            )
-            fig.update_layout(title="Average Hospital Admissions by COVID Status")
-            fig.update_layout(xaxis_title="Simulation Day", yaxis_title="Average Admissions")
-            plotly.offline.plot(fig, filename=str(output_dir.joinpath("cases_over_time.html")))
+            base_cases_df = pd.concat(base_cases, axis=1).reset_index(drop=True)
+            base_cases_df.insert(0, "Average", base_cases_df.mean(axis=1))
+            base_cases_df.to_csv(output_dir.joinpath(f"{scenario_dir.name}-cases-per-100k.csv"))
+            base_graphic(base_df, base_cases_df)
 
         # ----- Hospitalizations for One Specific Hospital
         ihdf = pd.concat(individual_hospital_dfs, axis=1).reset_index()

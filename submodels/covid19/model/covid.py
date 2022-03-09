@@ -72,10 +72,14 @@ class COVIDModel(HospitalABM):
         }
 
         # Setup EventStorage
-        self.covid_cases = EventStorage(column_names=["Unique_ID", "Time", "Type", "Vacc_Status", "Reported"])
-        self.blocked_covid_cases = EventStorage(column_names=["Unique_ID", "Time", "County"])
-        self.hcw_attendance_storage = EventStorage(column_names=["Unique_ID", "Location", "Time", "COVID_State"])
-        self.nh_visits = EventStorage(column_names=["Unique_ID", "Visitor_ID", "Time", "Visitor_Status"])
+        self.covid_cases = EventStorage(column_names=["Time", "Unique_ID", "Type", "Vacc_Status", "Reported"])
+        self.blocked_covid_cases = EventStorage(column_names=["Time", "Unique_ID", "County"])
+        self.hcw_attendance_storage = EventStorage(
+            column_names=["Time", "Unique_ID", "Location", "COVID_State", "Vacc_Status"]
+        )
+        self.nh_visits = EventStorage(
+            column_names=["Time", "Unique_ID", "Visitor_ID", "Visitor_Order", "COVID_State", "Vacc_Status", "Location"]
+        )
         self.hospitalizations = pd.DataFrame()
         self.out_of_county_cases = {}
 
@@ -86,7 +90,7 @@ class COVIDModel(HospitalABM):
         self.assign_vaccines_to_nursing_homes()
         self.assign_healthcare_worker_vaccination()
         self.init_covid_hospitalizations()
-        self.init_community_infections()
+        self.init_community_covid()
 
     def create_vaccine_rates(self):
         """The current vaccination data gets adjusted based on the 3 input community vaccination parameters
@@ -155,8 +159,8 @@ class COVIDModel(HospitalABM):
                     self.covid19.to(unique_id, state=state)
                     self.go_to_hospital(unique_id, covid_state=state, reported=True, initialize=True)
 
-    def init_community_infections(self):
-        """Setup initial COVID-19 cases in the community based on Infectious value from SEIR model."""
+    def init_community_covid(self):
+        """Setup initial COVID-19 cases in the community based on Infectious/Recovered values from SEIR model."""
         for county, county_str in self.county_codes_dict.items():
             # Total Cases
             infectious = self.cases.loc[(pd.to_datetime(self.start_date), county_str)].Infectious
@@ -175,6 +179,18 @@ class COVIDModel(HospitalABM):
                             self.covid19.to(unique_id, state=severity)
                             self.recovery_day[unique_id] = self.rng_stdlib.randint(1, self.params.infection_duration)
                             continue
+
+        # Assign Recoveries
+        for county, county_str in self.county_codes_dict.items():
+            # Total Cases
+            recovered = self.cases.loc[(pd.to_datetime(self.start_date), county_str)].Recovered
+            size = recovered * self.county_population[county_str] * self.multiplier
+            for age, value in enumerate(self.params.covid_age_distribution["distribution"]):
+                age_count = self.probabilistic_round(size * value)
+                selected_ids = self.find_exposures_in_community(size=age_count, county=county, age=age)
+                # All initial exposures are given covid.
+                for unique_id in selected_ids:
+                    self.covid19.to(unique_id, state=COVIDState.RECOVERED)
 
     def step(self):
         """The step function is the main driver of the COVID Class"""
@@ -223,9 +239,16 @@ class COVIDModel(HospitalABM):
         # Simulate vaccination blocking infection
         vacc_status = self.vaccination_status[unique_id]
         if vacc_status == VaccinationStatus.VACCINATED:
-            if self.rng.rand() < self.params.new_vaccine_effectiveness:
-                self.blocked_covid_cases.record_event((unique_id, self.time, self.county_code[unique_id]))
-                return True
+            # HCW:
+            if unique_id in self.hcw_ids:
+                if self.rng.rand() < self.params.hcw_vaccine_effectiveness:
+                    self.blocked_covid_cases.record_event((self.time, unique_id, self.county_code[unique_id]))
+                    return True
+            # Non-HCW
+            else:
+                if self.rng.rand() < self.params.vaccine_effectiveness:
+                    self.blocked_covid_cases.record_event((self.time, unique_id, self.county_code[unique_id]))
+                    return True
         return False
 
     def action_nh_visitation(self):
@@ -260,7 +283,7 @@ class COVIDModel(HospitalABM):
         state = severity.value
         # Asymptomatic/Mild Cases are not hospitalized
         if state in [COVIDState.ASYMPTOMATIC, COVIDState.MILD]:
-            self.covid_cases.record_event((unique_id, self.time, state, vacc_status, reported))
+            self.covid_cases.record_event((self.time, unique_id, state, vacc_status, reported))
             return
         # Severe/Critical cases must go to a hospital
         self.go_to_hospital(unique_id, covid_state=state, reported=reported, initialize=False)
@@ -281,7 +304,7 @@ class COVIDModel(HospitalABM):
         icu = True if covid_state == COVIDState.CRITICAL else False
         self.movement.move_to_stach(unique_id=unique_id, current_location=0, force_icu=icu)
         vacc_status = self.vaccination_status[unique_id]
-        self.covid_cases.record_event((unique_id, self.time, covid_state, vacc_status, reported))
+        self.covid_cases.record_event((self.time, unique_id, covid_state, vacc_status, reported))
 
         # If patient was turned away: Do nothing - they did not make it to a hospital
         new_location = self.movement.location.values[unique_id]
@@ -314,14 +337,21 @@ class COVIDModel(HospitalABM):
             f4 = self.vaccination_status[unique_ids] == VaccinationStatus.VACCINATED
         if vaccination_status == VaccinationStatus.NOTVACCINATED.name:
             f4 = self.vaccination_status[unique_ids] == VaccinationStatus.NOTVACCINATED
-        unique_ids = unique_ids[f1 & f2 & f3 & f4]
+        possible_ids = unique_ids[f1 & f2 & f3 & f4]
         try:
-            return select_agents(self, unique_ids, size)
+            return select_agents(self, possible_ids, size)
         except ValueError:
-            # We couldn't find enough people that meet this critieria.
-            people = self.find_exposures_in_community(size, county=None, age=age, vaccination_status=vaccination_status)
-            self.out_of_county_cases[(self.time, county)] = people
-            return people
+            # We couldn't find enough people that meet this critieria. Look at Recovered
+            f2 = self.covid19.values[unique_ids] == COVIDState.RECOVERED.value
+            possible_ids = unique_ids[f1 & f2 & f3 & f4]
+            try:
+                return select_agents(self, possible_ids, size)
+            except ValueError:
+                people = self.find_exposures_in_community(
+                    size, county=None, age=age, vaccination_status=vaccination_status
+                )
+                self.out_of_county_cases[(self.time, county)] = people
+                return people
 
     def load_cases(self):
         """Create the case forecasts using the SEIR model."""
@@ -375,8 +405,9 @@ class COVIDModel(HospitalABM):
         """Simulate NH Visitation: A visitor must pass several barriers before visiting"""
         self.assign_nh_visitors(unique_id)
 
-        for visitor_id, probability in self.nh_visitors[unique_id].items():
+        for visitor, (visitor_id, probability) in enumerate(self.nh_visitors[unique_id].items()):
             ""
+            visitor += 1
             # 0: Simulate random probability of visiting
             if self.rng.rand() > probability:
                 continue
@@ -387,15 +418,20 @@ class COVIDModel(HospitalABM):
             if self.life[visitor_id] == LifeState.DEAD:
                 continue
             # 3: If "MILD" symptoms, they may choose to stay home
-            visitor_state = self.covid19[visitor_id]
-            if visitor_state == COVIDState.MILD:
+            covid_state = self.covid19[visitor_id]
+            if covid_state == COVIDState.MILD:
                 if self.rng.rand() < self.params.visitors_with_mild_who_stay_home:
                     continue
             # 4: Cannot have Severe/Critical Symptoms
-            if visitor_state in [COVIDState.SEVERE, COVIDState.CRITICAL]:
+            if covid_state in [COVIDState.SEVERE, COVIDState.CRITICAL]:
                 continue
 
-            self.nh_visits.record_event((unique_id, visitor_id, self.time, visitor_state))
+            vaccination_status = self.vaccination_status[visitor_id]
+            location = self.movement.location[unique_id]
+
+            self.nh_visits.record_event(
+                (self.time, unique_id, visitor_id, visitor, covid_state, vaccination_status, location)
+            )
 
     def assign_nh_visitors(self, unique_id):
         """Each NH resident gets a list of visitors. We first select the number, and then the agents.
@@ -784,15 +820,14 @@ class COVIDModel(HospitalABM):
         # 3: If "MILD" symptoms, they may choose to stay home
         worker_state = self.covid19[unique_id]
         if worker_state == COVIDState.MILD:
-            # TODO: may update this to be worker specific. If not, update param name.
-            if self.rng.rand() < self.params.visitors_with_mild_who_stay_home:
+            if self.rng.rand() < self.params.hcw_with_mild_who_stay_home:
                 return
         # 4: Cannot have Severe/Critical Symptoms
         elif worker_state in [COVIDState.SEVERE, COVIDState.CRITICAL]:
             return
 
         # The final condition - whether today is a workday or not - varies by worker type
-
+        vacc_status = self.vaccination_status[unique_id]
         if worker_type == WorkerType.SINGLE_SITE_FULL_TIME:
             # Simulate random probability that today is a workday for this worker
             if self.rng.random() > self.params.workday_prob:
@@ -800,7 +835,7 @@ class COVIDModel(HospitalABM):
 
             # At this point, the worker has made it through all conditions, so they go to work today.
             site = self.healthcare_workers["single_site_full_time"]["assignments"][unique_id]
-            self.hcw_attendance_storage.record_event((unique_id, site.model_int, self.time, worker_state))
+            self.hcw_attendance_storage.record_event((self.time, unique_id, site.model_int, worker_state, vacc_status))
 
         elif worker_type == WorkerType.SINGLE_SITE_PART_TIME:
             # Simulate random probability that today is a workday for this worker.
@@ -810,7 +845,7 @@ class COVIDModel(HospitalABM):
 
             # At this point, the worker has made it through all conditions, so they go to work today.
             site = self.healthcare_workers["single_site_part_time"]["assignments"][unique_id]
-            self.hcw_attendance_storage.record_event((unique_id, site.model_int, self.time, worker_state))
+            self.hcw_attendance_storage.record_event((self.time, unique_id, site.model_int, worker_state, vacc_status))
 
         elif worker_type == WorkerType.MULTI_SITE:
             # Simulate random probability that today is a workday for this worker
@@ -826,7 +861,7 @@ class COVIDModel(HospitalABM):
                 site = self.healthcare_workers["multi_site"]["assignments"][unique_id]["secondary"]
             else:
                 site = self.healthcare_workers["multi_site"]["assignments"][unique_id]["primary"]
-            self.hcw_attendance_storage.record_event((unique_id, site.model_int, self.time, worker_state))
+            self.hcw_attendance_storage.record_event((self.time, unique_id, site.model_int, worker_state, vacc_status))
 
         elif worker_type == WorkerType.CONTRACT:
             # Simulate random probability that today is a workday for this worker
@@ -836,7 +871,7 @@ class COVIDModel(HospitalABM):
             # At this point, the worker has made it through all conditions, so they go to work today.
             # Since this is a contract worker, randomly choose one of their sites.
             site = self.rng.choice(self.healthcare_workers["contract"]["assignments"][unique_id])
-            self.hcw_attendance_storage.record_event((unique_id, site.model_int, self.time, worker_state))
+            self.hcw_attendance_storage.record_event((self.time, unique_id, site.model_int, worker_state, vacc_status))
 
     def collect_data(self):
         """Different parameters will cause the model to collect different pieces of information"""
@@ -866,8 +901,13 @@ class COVIDModel(HospitalABM):
         # Save HCW Attendance
         if self.params.include_hcw_attendance:
             hcw_df = self.hcw_attendance_storage.make_events()
+            hcw_df.to_csv(self.output_dir.joinpath("hcw_attendance.csv"), index=False)
             hcw_df = hcw_df.groupby(["Location", "Time", "COVID_State"]).size()
             hcw_df = hcw_df.reset_index()
             hcw_df.columns = ["Location", "Time", "COVID_State", "Count"]
             # hcw_df['Location'] = [self.nodes.facilities[i].federal_provider_number for i in hcw_df.Location.values]
             hcw_df.to_csv(self.output_dir.joinpath("hcw_attendance_counts.csv"), index=False)
+        # Save NH Visits
+        if self.params.simulate_nh_visitation:
+            nhv_df = self.nh_visits.make_events()
+            nhv_df.to_csv(self.output_dir.joinpath("nh_visits.csv"), index=False)

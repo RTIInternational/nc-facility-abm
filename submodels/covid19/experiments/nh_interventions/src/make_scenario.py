@@ -1,14 +1,12 @@
-from pathlib import Path
-from submodels.covid19.model.parameters import CovidParameters
-
 import yaml
+from pathlib import Path
+
 
 base_parameters_file = "submodels/covid19/experiments/base/scenario_base/parameters.yml"
-experiment_dir = Path("submodels/covid19/experiments/nsf_01_2021/")
+experiment_dir = Path("submodels/covid19/experiments/nh_interventions")
 
 
-def main():
-    """Setup the scenarios for the NSF runs."""
+if __name__ == "__main__":
 
     base_vaccine_effectivness = 0.24
     base_case_multiplier = 8
@@ -18,9 +16,8 @@ def main():
         with Path(base_parameters_file).open(mode="r") as f:
             params = yaml.safe_load(f)
         # ----- Turn on non-covid-hospitalizations
-        params["track_hospitalizations"] = True
         params["use_historical_case_counts"] = True
-        params["num_agents"] = 5_000_000
+        params["num_agents"] = 2_000_000
         params["baseline_vaccine_effectiveness"] = base_vaccine_effectivness
         params["vaccine_effectiveness"] = base_vaccine_effectivness
         params["hcw_vaccine_effectiveness"] = base_vaccine_effectivness
@@ -30,9 +27,12 @@ def main():
     # Different Options
     options = {
         "base": {},
+        "increase_hcw_boosters": {"hcw_vaccine_effectiveness": 0.4},
+        "increase_general_boosters": {"vaccine_effectiveness": 0.4, "hcw_vaccine_effectiveness": 0.4},
         "case_multiplier_4": {"case_multiplier": 4},
+        "case_multiplier_4_with_hcw_booster": {"case_multiplier": 4, "hcw_vaccine_effectiveness": 0.4},
         "case_multiplier_6": {"case_multiplier": 6},
-        "increase_vaccine_effectivness": {"vaccine_effectiveness": 0.75, "hcw_vaccine_effectiveness": 0.75},
+        "case_multiplier_6_with_hcw_booster": {"case_multiplier": 6, "hcw_vaccine_effectiveness": 0.4},
     }
     for key, values in options.items():
         name = f"scenario_{key}"
@@ -43,22 +43,3 @@ def main():
             params[param_key] = param_value
         with scenario_dir.joinpath("parameters.yml").open(mode="w") as f:
             yaml.dump(params, f)
-
-    # Special Scenario: Increase Asymptomatic Cases by 50%
-    scenario_dir = experiment_dir.joinpath("scenario_increase_asymptomatic_cases")
-    scenario_dir.mkdir(parents=True, exist_ok=True)
-    params = make_params()
-    covid_params = CovidParameters()
-    for reported in ["reported", "nonreported"]:
-        for vaccinated in ["notvaccinated", "vaccinated"]:
-            p = f"{reported}_{vaccinated}_severity"
-            cp = covid_params.__dict__[p]
-            for age in [0, 1, 2]:
-                cp[age][0] *= 1.5  # <--- This is the line that does +50%.
-            params[p] = cp
-    with scenario_dir.joinpath("parameters.yml").open(mode="w") as f:
-        yaml.dump(params, f)
-
-
-if __name__ == "__main__":
-    main()

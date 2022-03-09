@@ -24,18 +24,29 @@ python submodels/covid19/experiments/nsf_01_2021/src/analyze_scenarios.py
 
 We ran this analysis on a server to make use of larger computer resources. 
 
-On the server:
+* On the server:
 
 ```
 docker-compose build
 ```
 
-Then:
+* Make & Run the scenarios:
 
 ```
 docker-compose run -d hospital_abm bash -c "python3 submodels/covid19/experiments/nsf_01_2021/src/make_scenario.py"
 
-docker-compose run -d hospital_abm bash -c "python3 submodels/covid19/experiments/nsf_01_2021/src/run_scenario.py --n=100 --cpus=10"
+docker-compose run -d hospital_abm bash -c "python3 submodels/covid19/experiments/nsf_01_2021/src/run_scenario.py --n=100 --cpus=15"
 
+```
+
+* It is possible that some runs fail. This seems to be a server issue, and not an error with the models themselves. The following code looks for directories that do not have results and reruns them with the same originally assigned seed. They do not fail a second time. 
+
+```
+docker-compose run -d hospital_abm bash -c "python3 submodels/covid19/experiments/nsf_01_2021/src/check_failures.py"
+```
+
+* Generate the aggregated output:
+
+```
 docker-compose run -d hospital_abm bash -c "python3 submodels/covid19/experiments/nsf_01_2021/src/analyze_scenarios.py"
 ```

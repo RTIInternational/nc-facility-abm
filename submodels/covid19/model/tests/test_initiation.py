@@ -106,5 +106,19 @@ class TestInitiation(TestCase):
 
         # TODO The split of MILD Assymptomatic should match the input parameters
 
+    def test_init_community_recovered(self):
+        """The infectious rate in the community should match the SEIR output"""
+        model = self.model
+
+        # ----- The current number of infections should have been initiated
+        counts = model.covid19.value_counts()
+        value = counts[COVIDState.RECOVERED.name]
+        target = 0
+        county_dict = {v: k for k, v in model.county_codes_dict.items()}
+        for county_str, row in model.cases.loc[pd.to_datetime(model.start_date)].iterrows():
+            county = county_dict[county_str]
+            target += len(model._county_code_unique_ids[county]) * row.Recovered
+        assert np.isclose(value / target, 1, atol=0.02)
+
     def test_create_vaccine_rates(self):
         pass

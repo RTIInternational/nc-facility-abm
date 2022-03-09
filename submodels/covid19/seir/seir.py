@@ -15,10 +15,10 @@ seir_params = {
     "length_infection": 6,  # ------------ Length of virus infection. source:
     "length_exposure": 5,  # ------------- Length of virus exposure before infection. source:
     "r0_estimate": 1.25,  # -------------- Estimated R0 of the virus. source:
-    "immunity_length": 150,  # ----------- Number of days agents stay immune after getting the virus. source:
+    "immunity_length": 90,  # ----------- Number of days agents stay immune after getting the virus. source:
     "initial_case_multiplier": 10,  # ---- The case multiplier to use for earlier in the pandemic
     "middle_case_multiplier": 4,  # ------ The case multiplier to use for the middle of the pandemic
-    "current_case_multiplier": 10,  # ------- The case multiplier to use for the forecast period
+    "current_case_multiplier": 8,  # ------- The case multiplier to use for the forecast period
 }
 
 
@@ -166,18 +166,17 @@ class NCSEIR:
         # ----- Estimate the Susceptible at each day.
         county_pop = self.county_population[county]
 
-        # People who are infected leave Susceptible - They return to Susceptible X Days Later
-        leaving_s = county_data.Infections / county_pop
-        join_s = leaving_s.shift(self.seir_params["immunity_length"]).fillna(0)
-        county_data["Susceptible"] = 1 - leaving_s.cumsum() + join_s.cumsum()
-
-        # ----- Estimate the Exposed at each day. Exposed a t is based on infected a t+1
+        # Exposed at time T is back calculated
         county_data["Exposed"] = (county_data["Infections"].shift(-1) / county_pop / self.alpha).fillna(0)
-        # ----- Estimate the Infectious at each day
+        # Infectious at Time T: Based on total infections
         days = self.seir_params["length_infection"]
         county_data["Infectious"] = rollit(county_data["Infections"].values, days) / county_pop
-        # ----- Estimate Recovered
-        county_data["Recovered"] = 1 - county_data[["Susceptible", "Exposed", "Infectious"]].sum(axis=1)
+        # Recovered at time T: Based on people leaving infections - people leaving recovered
+        leaving_i = (county_data["Infectious"] * (1 / seir_params["length_infection"])).cumsum()
+        leaving_r = leaving_i.shift(self.seir_params["immunity_length"]).fillna(0)
+        county_data["Recovered"] = leaving_i - leaving_r
+        # Susceptible is what remains
+        county_data["Susceptible"] = 1 - county_data[["Exposed", "Infectious", "Recovered"]].sum(axis=1)
 
         # ----- Calculate Beta
         beta = (county_data["Re"] / seir_params["length_infection"]) / county_data["Susceptible"]

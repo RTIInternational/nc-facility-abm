@@ -85,7 +85,7 @@ class TestCOVIDInCommunity(TestCase):
         # ----- Blocked Cases is X% of (Blocked + Vacc Cases)
         bc = blocked_cases.shape[0]
         vc = cases[cases.Vacc_Status == VaccinationStatus.VACCINATED].shape[0]
-        assert np.isclose((bc) / (vc + bc), model.params.new_vaccine_effectiveness, atol=0.01)
+        assert np.isclose((bc) / (vc + bc), model.params.vaccine_effectiveness, atol=0.01)
 
         # ----- Hospitalizations are correct by vaccination status
         if model.params.num_agents > 2000000:
