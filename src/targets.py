@@ -232,6 +232,7 @@ class Analyze:
 
         df = pd.melt(df, id_vars="index", value_vars=df.columns[1:])
         df.columns = ["Day", "Category", "Count"]
+        df['Count'] /= self.model.multiplier
 
         fig = px.line(df, x="Day", y="Count", color="Category", title="")
         fig.show()

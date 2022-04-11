@@ -19,7 +19,6 @@ class CovidParameters(Parameters):
 
         # Tracking Parameters
         self.add_param("track_hospitalizations", False, "Set True to track all hospitalizations.")
-        self.add_param("simulate_nh_visitation", True, "Set True to simulate NH visitations")
 
         # SEIR Parameters
         self.add_param("r_effective", 1.5, "The effective reproduction number for COVID used in the SEIR model.")
@@ -130,5 +129,8 @@ class CovidParameters(Parameters):
             "Hours worked per week by part-time healthcare workers (as a fraction of full_time_hours_per_week)",
         )
         self.add_param("contract_worker_n_sites", 3, "Number of facilities at which each contract worker works")
-        self.add_param("rapid_test_false_negative_rate_mild", 0.28)
-        self.add_param("rapid_test_false_negative_rate_asymptomatic", 0.42)
+        self.add_param(
+            "contract_hours_multiplier",
+            1.0,
+            "Multiplies the data-derived proportion of hours worked by contract workers by facility",
+        )

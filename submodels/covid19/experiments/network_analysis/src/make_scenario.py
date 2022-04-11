@@ -5,14 +5,13 @@ import yaml
 import src.data_input as di
 
 base_parameters_file = "submodels/covid19/experiments/base/scenario_base/parameters.yml"
-experiment_dir = Path("submodels/covid19/experiments/nh_interventions")
-
+experiment_dir = Path("submodels/covid19/experiments/network_analysis")
 
 if __name__ == "__main__":
 
     base_vaccine_effectivness = 0.24
-    base_case_multiplier = 8
-    num_agents = int(di.nc_counties().Population.sum())
+    base_case_multiplier = 6
+    nc_populaiton = di.nc_counties().Population.sum()
 
     def make_params():
         # ----- Setup the base experiment
@@ -20,7 +19,6 @@ if __name__ == "__main__":
             params = yaml.safe_load(f)
         # ----- Turn on non-covid-hospitalizations
         params["use_historical_case_counts"] = True
-        params["num_agents"] = num_agents
         params["baseline_vaccine_effectiveness"] = base_vaccine_effectivness
         params["vaccine_effectiveness"] = base_vaccine_effectivness
         params["hcw_vaccine_effectiveness"] = base_vaccine_effectivness
@@ -29,13 +27,13 @@ if __name__ == "__main__":
 
     # Different Options
     options = {
-        "base": {},
-        "increase_hcw_boosters": {"hcw_vaccine_effectiveness": 0.4},
-        "increase_general_boosters": {"vaccine_effectiveness": 0.4, "hcw_vaccine_effectiveness": 0.4},
-        "case_multiplier_4": {"case_multiplier": 4},
-        "case_multiplier_4_with_hcw_booster": {"case_multiplier": 4, "hcw_vaccine_effectiveness": 0.4},
-        "case_multiplier_6": {"case_multiplier": 6},
-        "case_multiplier_6_with_hcw_booster": {"case_multiplier": 6, "hcw_vaccine_effectiveness": 0.4},
+        "base_small": {"num_agents": 1_000_000},
+        "contract_workers_2": {"contract_worker_n_sites": 2},
+        "contract_workers_3": {"contract_worker_n_sites": 3},
+        "contract_workers_4": {"contract_worker_n_sites": 4},
+        "contract_workers_5": {"contract_worker_n_sites": 5},
+        "increase_contract_hours_1.5": {"contract_hours_multiplier": 1.5},
+        "decrease_contract_hours_.5": {"contract_hours_multiplier": 0.5},
     }
     for key, values in options.items():
         name = f"scenario_{key}"

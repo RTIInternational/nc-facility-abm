@@ -54,6 +54,14 @@ def stach_transitions(fbf, params, hospital: str, demographic_breakdown: pd.Data
     a1 = demographic_breakdown.loc[age_1_columns, hospital].sum() * 0.75 / temp_total
     a2 = demographic_breakdown.loc[age_2_columns, hospital].sum() / temp_total
 
+    # Remove people that go NH -> ST -> NH through force
+    h65p = demographic_breakdown.loc[
+        age_2_columns,
+    ].Total.sum()
+    h65p = (h65p - fbf.loc["NH", "HOSPITAL"] * params.location.nh_st_nh) / h65p
+    # Update the a2 value
+    a2 = a2 * h65p / (1 - a2 * (1 - h65p))
+
     rows = []
     for age_group in params.age_groups:
         # Whats the probability of being discharged to a hospital?
@@ -260,9 +268,9 @@ def prepare_transitions(params):
 
     # Step 1: Adjust the totals so that there is enough Community -> Hospital
     for _, row in hospital_df.iterrows():
-        discharge_total = discharges[[_]].sum()
+        row_discharge_total = discharges[[_]].sum()
         needed_total = hospital_df.loc[_].NC_Yearly_Adm
-        ratio = (needed_total / discharge_total).values[0]
+        ratio = (needed_total / row_discharge_total).values[0]
         discharges[[_]] = (round(discharges[[_]] * ratio)).astype(int)
 
     discharges["Adjusted_Total"] = discharges[[i for i in hospital_df.index]].sum(axis=1)
@@ -276,11 +284,18 @@ def prepare_transitions(params):
     ).set_index(["County_Code", "Age_Group"])
     community["Population"] = syn_pop_counts
     temp = distribute_discharges(counties, discharges, p_L50, p_50_64, p_G65)
-    community["HOSPITAL"] = temp / community["Population"] / 365
-    # How many are 65+, and take into account several of these people are not in the community
+
+    # Estimate the population in the community (remove people in hospitals or NHs)
+    community["Count_in_Hospital"] = [i / 365 * (hospital_df["LOS"].mean() + 1) for i in temp]
+    nh_population = nh_beds * (nursing_homes.average_number_of_residents_per_day.sum() / nursing_homes.Beds.sum())
     g65 = community[community.index.get_level_values(1) == 2].Population.sum()
-    g65 -= nh_beds * (nursing_homes.average_number_of_residents_per_day.sum() / nursing_homes.Beds.sum())
-    community["NH"] = [0, 0, fbf.loc[LocationCategories.COMMUNITY.name][LocationCategories.NH.name] / g65 / 365] * 100
+    community["Count_in_NH"] = community["Population"] * nh_population / g65
+    community.loc[community.index.get_level_values(1) != 2, "Count_in_NH"] = 0
+
+    community["HOSPITAL"] = temp / (community["Population"] - community.Count_in_Hospital - community.Count_in_NH) / 365
+    # How many are 65+, and take into account several of these people are not in the community
+    g65r = g65 - community[community.index.get_level_values(1) == 2].Count_in_NH.sum()
+    community["NH"] = [0, 0, fbf.loc[LocationCategories.COMMUNITY.name][LocationCategories.NH.name] / g65r / 365] * 100
 
     # --------------------
     # Facility Transitions

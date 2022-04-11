@@ -1,0 +1,8 @@
+baseline_vaccine_effectiveness: 0.24
+case_multiplier: 4
+hcw_vaccine_effectiveness: 0.24
+num_agents: 2500000
+time_horizon: 30
+track_hospitalizations: true
+use_historical_case_counts: true
+vaccine_effectiveness: 0.24

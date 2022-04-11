@@ -1,5 +1,6 @@
 import datetime as dt
 from copy import copy
+from math import ceil
 from typing import List
 
 import numpy as np
@@ -252,14 +253,14 @@ class COVIDModel(HospitalABM):
         return False
 
     def action_nh_visitation(self):
-        """ Simulate nursing home visiation """
+        """Simulate nursing home visiation"""
         if self.params.include_nh_visitation:
             nh_ids = self.unique_ids[np.isin(self.movement.location.values, self.nodes.category_ints["NH"])]
             for unique_id in nh_ids:
                 self.actions.append([self.nh_visitation, {"unique_id": unique_id}])
 
     def action_hcw_attendance(self):
-        """ Simulate healthcare workers going to work """
+        """Simulate healthcare workers going to work"""
         if self.params.include_hcw_attendance:
             for worker in self.healthcare_workers["single_site_full_time"]["workers"]:
                 self.actions.append(
@@ -289,7 +290,7 @@ class COVIDModel(HospitalABM):
         self.go_to_hospital(unique_id, covid_state=state, reported=reported, initialize=False)
 
     def find_covid_severity(self, unique_id: int, vacc_status: int):
-        """ Find the severity of a COVID case based on a persons age group and vaccination status"""
+        """Find the severity of a COVID case based on a persons age group and vaccination status"""
         if self.rng.rand() < self.proportion_of_cases_reported:
             reported = True
             distribution = self.covid_distributions["reported"]
@@ -406,7 +407,6 @@ class COVIDModel(HospitalABM):
         self.assign_nh_visitors(unique_id)
 
         for visitor, (visitor_id, probability) in enumerate(self.nh_visitors[unique_id].items()):
-            ""
             visitor += 1
             # 0: Simulate random probability of visiting
             if self.rng.rand() > probability:
@@ -495,6 +495,7 @@ class COVIDModel(HospitalABM):
 
         worker_counts = calculate_target_worker_counts(read_staffing_data(), self.params, self.multiplier)
         worker_counts = worker_counts.set_index("federal_provider_number")
+        self.worker_counts = worker_counts
         county_codes = worker_counts.County_Code.unique().tolist()
 
         # Assign employees by county
@@ -553,13 +554,15 @@ class COVIDModel(HospitalABM):
 
         county_sums = worker_counts.groupby("County_Code").sum().reset_index()
         counties_with_10_contract_workers = county_sums.query("target_contract_workers >= 10").County_Code.tolist()
+        # Ensure this rounds up.
+        n_contract_workers = ceil(worker_counts.target_contract_workers.sum() / self.params.contract_worker_n_sites)
 
-        n_contract_workers = int(worker_counts.target_contract_workers.sum() / 3)
         employees = (
             self.healthcare_workers["single_site_full_time"]["workers"]
-            + self.healthcare_workers["single_site_part_time"]["workers"]
-            + self.healthcare_workers["multi_site"]["workers"]
+            + self.healthcare_workers["single_site_part_time"]["workers"]  # noqa: W503
+            + self.healthcare_workers["multi_site"]["workers"]  # noqa: W503
         )
+
         employees_array = np.array(employees)
         county_filter = np.isin(self.county_code, counties_with_10_contract_workers)
         employee_filter = ~np.isin(self.unique_ids, employees_array)
@@ -567,7 +570,6 @@ class COVIDModel(HospitalABM):
         self.healthcare_workers["contract"]["workers"] = select_agents(self, free_agents, n_contract_workers)
 
         # Assign contract workers
-
         self.assign_contract_workers(county_codes, county_distances, nursing_homes, worker_counts)
 
     def assign_healthcare_workers_to_n_sites(
@@ -804,7 +806,7 @@ class COVIDModel(HospitalABM):
                             self.healthcare_workers["contract"]["assignments"][worker].append(site)
                         else:
                             self.healthcare_workers["contract"]["assignments"][worker] = [site]
-                        if county_workers[county][worker] == 3:
+                        if county_workers[county][worker] == self.params.contract_worker_n_sites:
                             county_workers[county].pop(worker)
                         available_workers.pop(0)
 
@@ -878,7 +880,7 @@ class COVIDModel(HospitalABM):
         if self.params.track_hospitalizations:
             # Limit to only movement events from today
             events = self.movement.location.state_changes.make_events()
-            events = events[(events.Time == self.time) & (events.Location == 0)].copy()
+            events = events[(events.Time == self.time) & (events.New_Location != 0)].copy()
             # Replace LOS
             events["LOS"] = [self.movement.leave_facility_day[i] - self.time for i in events.Unique_ID]
             events["Age"] = [self.age_group[i] for i in events.Unique_ID]
@@ -908,6 +910,6 @@ class COVIDModel(HospitalABM):
             # hcw_df['Location'] = [self.nodes.facilities[i].federal_provider_number for i in hcw_df.Location.values]
             hcw_df.to_csv(self.output_dir.joinpath("hcw_attendance_counts.csv"), index=False)
         # Save NH Visits
-        if self.params.simulate_nh_visitation:
+        if self.params.include_nh_visitation:
             nhv_df = self.nh_visits.make_events()
             nhv_df.to_csv(self.output_dir.joinpath("nh_visits.csv"), index=False)

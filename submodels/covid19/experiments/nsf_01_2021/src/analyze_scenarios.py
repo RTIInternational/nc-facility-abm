@@ -69,6 +69,7 @@ if __name__ == "__main__":
 
             # Count the number of entries by COVID status
             df = df[df.Category == "HOSPITAL"]
+            df = df[df.Location == 0]
             th = pd.DataFrame(df.groupby(["COVID_Status", "Vaccination_Status"]).size() / multiplier)
             th[0] = np.round(th[0]).astype(int)
             th.columns = [f"Count_{run.name}"]

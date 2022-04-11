@@ -1,3 +1,4 @@
+from copy import deepcopy
 from itertools import combinations
 from unittest import TestCase
 
@@ -184,3 +185,22 @@ class TestHealthcareWorkers(TestCase):
 
         # No more than 5% of contract workers should have a site in a county more than 200 miles from their home county.
         assert percent_distances_over(contract_site_distances, 200) < 0.05
+
+    def test_contract_multiplier(self):
+        worker_counts = calculate_target_worker_counts(read_staffing_data(), self.model.params, self.model.multiplier)
+
+        unadjusted_params = deepcopy(self.model.params)
+        setattr(unadjusted_params, "contract_hours_multiplier", 1)
+
+        unadjusted_worker_counts = calculate_target_worker_counts(
+            read_staffing_data(), unadjusted_params, self.model.multiplier
+        )
+
+        for i, row in worker_counts.iterrows():
+            assert row["total_hrs"] == row["emp_hrs"] + row["ctr_hrs"]
+            assert row["ctr_hrs"] <= row["total_hrs"]
+            if row["ctr_hrs"] < row["total_hrs"]:
+                assert (
+                    row["ctr_hrs"]
+                    == unadjusted_worker_counts["ctr_hrs"][i] * self.model.params.contract_hours_multiplier
+                )

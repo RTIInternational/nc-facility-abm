@@ -74,6 +74,13 @@ def calculate_target_worker_counts(
     - Contract worker hours:
         - Round contarct worker hours to the nearest unit of time workable by a contract worker
     """
+    # Adjust contract and employee hours per the contract multiplier parameter
+    staffing_data["total_hrs"] = staffing_data["emp_hrs"] + staffing_data["ctr_hrs"]
+    staffing_data["ctr_hrs"] = [
+        min(j * params.contract_hours_multiplier, staffing_data["total_hrs"][i])
+        for i, j in enumerate(staffing_data["ctr_hrs"])
+    ]
+    staffing_data["emp_hrs"] = staffing_data["total_hrs"] - staffing_data["ctr_hrs"]
 
     # Use the constants to calculate how many hours should be worked in each category at each site.
 
@@ -91,6 +98,7 @@ def calculate_target_worker_counts(
     staffing_data["multi_site_secondary_hrs"] = (
         staffing_data.emp_hrs * params.pct_multi_site_workers * params.pct_time_second_site
     ) * multiplier
+    staffing_data["ctr_hrs"] = staffing_data.ctr_hrs * multiplier
 
     def closest_divisible_by(dividend: float, divisor: int) -> int:
         """

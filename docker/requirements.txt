@@ -31,3 +31,5 @@ opencv-python==4.5.3.56
 sodapy==2.1.0
 pyinstrument==4.0.4
 geopy==2.2.0
+ipython==8.1.1
+networkx==2.7.1
